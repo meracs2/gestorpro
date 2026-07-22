@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Landing page minimalista para un portafolio de diseño web"
+    />
+    <title>Studio Norte | Diseño web minimalista</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="corner-lines">
+        <div class="top-right-h"></div>
+        <div class="top-right-v"></div>
+        <div class="bottom-left-h"></div>
+        <div class="bottom-left-v"></div>
+        <div class="bottom-right-h"></div>
+        <div class="bottom-right-v"></div>
+      </div>
+      <header class="topbar">
+        <a class="brand" href="#inicio">Studio Norte</a>
+        <nav class="nav-links" aria-label="Navegación principal">
+          <a href="#proyectos">Proyectos</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </header>
+
+      <main id="inicio">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Diseño web con enfoque claro</p>
+            <h1>Transformo ideas en experiencias digitales memorables.</h1>
+            <p class="hero-text">
+              Creo sitios web elegantes, rápidos y pensados para convertir.
+              Mi trabajo combina estrategia, identidad visual y desarrollo
+              limpio para marcas que quieren destacar sin ruido.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
+              <a class="btn btn-secondary" href="#contacto">Hablemos</a>
+            </div>
+            <ul class="hero-highlights" aria-label="Destacados">
+              <li>UI/UX</li>
+              <li>Landing pages</li>
+              <li>Brand systems</li>
+            </ul>
+          </div>
+
+          <aside class="hero-card" aria-label="Resumen de trabajo">
+            <div class="card-block">
+              <span class="card-label">Último proyecto</span>
+              <h2>North Studio</h2>
+              <p>Rediseño de identidad y experiencia para una marca boutique.</p>
+            </div>
+            <div class="card-metrics">
+              <div>
+                <strong>+20</strong>
+                <span>Proyectos</span>
+              </div>
+              <div>
+                <strong>4.9/5</strong>
+                <span>Valoración</span>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section id="proyectos" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Selección</p>
+            <h2>Proyectos que mezclan estética y claridad.</h2>
+          </div>
+
+          <div class="project-grid">
+            <article class="project-card">
+              <h3>Horizon</h3>
+              <p>Landing page premium para una startup de bienestar digital.</p>
+              <span>Branding · Webflow</span>
+            </article>
+            <article class="project-card">
+              <h3>Atelier 8</h3>
+              <p>Portafolio editorial con enfoque visual sobrio y sofisticado.</p>
+              <span>UI/UX · Diseño</span>
+            </article>
+            <article class="project-card">
+              <h3>Valora</h3>
+              <p>Experiencia de compra simplificada para una marca de moda.</p>
+              <span>E-commerce · Desarrollo</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="servicios" class="section services">
+          <div class="section-heading">
+            <p class="eyebrow">Servicios</p>
+            <h2>Un proceso simple para resultados sólidos.</h2>
+          </div>
+
+          <div class="services-grid">
+            <div>
+              <h3>Diseño estratégico</h3>
+              <p>Investigación, arquitectura y mensajes claros para cada etapa.</p>
+            </div>
+            <div>
+              <h3>Interfaces elegantes</h3>
+              <p>Diseños limpios, consistentes y orientados a la acción.</p>
+            </div>
+            <div>
+              <h3>Desarrollo atento</h3>
+              <p>Entrega rápida y escalable con foco en rendimiento y experiencia.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer id="contacto" class="footer">
+        <p>¿Listo para crear una presencia digital que se sienta distinta?</p>
+        <a class="btn btn-primary" href="mailto:hola@studionorte.com">hola@studionorte.com</a>
+        <small>© <span id="year"></span> Studio Norte</small>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
