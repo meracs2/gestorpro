@@ -493,6 +493,22 @@ export default function Page() {
           width: 380px;
           height: 520px;
         }
+        .chat-trigger-btn {
+          background-color: #0f172a;
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 50px;
+          padding: 12px 20px;
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          width: 100%;
+        }
 
         @media (max-width: 768px) {
           .nav-desktop {
@@ -535,14 +551,33 @@ export default function Page() {
             width: 100%;
           }
           .chat-widget-container {
-            bottom: 16px;
-            right: 16px;
-            left: 16px;
+            bottom: 20px;
+            right: 20px;
+            left: auto;
           }
           .chat-window {
-            width: 100% !important;
+            width: calc(100vw - 32px) !important;
             height: 80vh !important;
             max-height: 550px;
+          }
+          .chat-trigger-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            padding: 0;
+            position: relative;
+          }
+          .chat-trigger-btn .chat-btn-text {
+            display: none;
+          }
+          .chat-trigger-btn .chat-btn-icon {
+            font-size: 24px;
+          }
+          .chat-trigger-btn .chat-btn-status {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            border: 2px solid #0f172a;
           }
         }
       `}</style>
@@ -1030,26 +1065,12 @@ export default function Page() {
         {!isAssistantOpen ? (
           <button
             onClick={() => setIsAssistantOpen(true)}
-            style={{
-              backgroundColor: '#0f172a',
-              color: '#ffffff',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '50px',
-              padding: '12px 20px',
-              fontSize: '14px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              boxShadow: '0 12px 30px rgba(15, 23, 42, 0.35)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              width: '100%'
-            }}
+            className="chat-trigger-btn"
+            aria-label="Abrir asistente virtual"
           >
-            <span style={{ fontSize: '16px' }}>💬</span>
-            <span>Asistente Virtual</span>
-            <span style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
+            <span className="chat-btn-icon" style={{ fontSize: '16px' }}>💬</span>
+            <span className="chat-btn-text">Asistente Virtual</span>
+            <span className="chat-btn-status" style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
           </button>
         ) : (
           <div className="chat-window" style={{
