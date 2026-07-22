@@ -377,7 +377,8 @@ export default function Page() {
         action: 'service',
         data: s.id
       }));
-      subMenuOptions.push({ label: '🔙 Volver al menú principal', action: 'main_menu' });
+      // CORREGIDO: Se añade 'data: ""' para cumplir exactamente con la interfaz requerida
+      subMenuOptions.push({ label: '🔙 Volver al menú principal', action: 'main_menu', data: '' });
       
       const newMsgBot: ChatMessage = {
         role: 'model',
@@ -399,7 +400,7 @@ export default function Page() {
               `¡Llegamos al final de la explicación! Si deseas avanzar con esta gestión, coordinemos directamente por WhatsApp con el mensaje precargado.`,
         options: [
           { label: '💬 Coordinar gestión por WhatsApp', action: 'whatsapp', data: service.title },
-          { label: '🔙 Volver al menú principal', action: 'main_menu' }
+          { label: '🔙 Volver al menú principal', action: 'main_menu', data: '' }
         ]
       };
       setMessages(prev => [...prev, newMsgUser, newMsgBot]);
