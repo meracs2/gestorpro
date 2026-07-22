@@ -155,7 +155,7 @@ const servicesList: Service[] = [
   },
   {
     id: 'patentes_registrales',
-    title: 'Informes Historicos de Dominio',
+    title: 'Informes Históricos de Dominio',
     category: 'Registral',
     description: 'Búsqueda de titularidades históricas y cadenas dominiales inmobiliarias o vehiculares.',
     detalle: 'Informes ampliados para estudios de títulos.',
@@ -192,7 +192,7 @@ const servicesList: Service[] = [
     description: 'Trámites societarios, rúbrica de libros y presentación de balances ante la IPJ.',
     detalle: 'Gestión integral para sociedades, asociaciones civiles y fundaciones en Córdoba.',
     tiempoDemora: '72 a 96 hs',
-    explicacionAmpliada: 'Presentación de estatutos, inscripciones de directorios, rubrica de libros contables y societarios ante el organismo de control.',
+    explicacionAmpliada: 'Presentación de estatutos, inscripciones de directorios, rúbrica de libros contables y societarios ante el organismo de control.',
     organismo: 'IPJ Córdoba'
   },
   {
@@ -432,6 +432,11 @@ export default function Page() {
     window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
+  const handleAppointmentClick = () => {
+    const text = `Hola, quisiera agendar una cita presencial en la oficina de Córdoba para consultar por una gestión.`;
+    window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
   return (
     <div style={{ 
       backgroundColor: '#f8fafc', 
@@ -490,8 +495,8 @@ export default function Page() {
           z-index: 1000;
         }
         .chat-window {
-          width: 380px;
-          height: 520px;
+          width: 340px;
+          height: 460px;
         }
         .chat-trigger-btn {
           background-color: #0f172a;
@@ -551,18 +556,19 @@ export default function Page() {
             width: 100%;
           }
           .chat-widget-container {
-            bottom: 20px;
-            right: 20px;
+            bottom: 16px;
+            right: 16px;
             left: auto;
           }
           .chat-window {
             width: calc(100vw - 32px) !important;
-            height: 80vh !important;
-            max-height: 550px;
+            max-width: 340px !important;
+            height: 70vh !important;
+            max-height: 440px;
           }
           .chat-trigger-btn {
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             padding: 0;
             position: relative;
@@ -571,7 +577,7 @@ export default function Page() {
             display: none;
           }
           .chat-trigger-btn .chat-btn-icon {
-            font-size: 24px;
+            font-size: 22px;
           }
           .chat-trigger-btn .chat-btn-status {
             position: absolute;
@@ -1027,7 +1033,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* UBICACIÓN Y MAPA */}
+        {/* UBICACIÓN Y MAPA CON BOTÓN DE AGENDAR CITA */}
         <section id="contacto" style={{ marginBottom: '60px', backgroundColor: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', alignItems: 'center' }}>
             <div>
@@ -1037,16 +1043,37 @@ export default function Page() {
               <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6, margin: '0 0 16px 0' }}>
                 Operamos de forma presencial con cobertura en Córdoba y el interior, optimizando los plazos y gestiones ante cada dependencia.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px 0', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#334155' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px 0', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#334155' }}>
                 <li>📍 <strong>Dirección:</strong> Calle Linda 123, Córdoba Capital.</li>
                 <li>⏱ <strong>Horario de atención:</strong> Lunes a Viernes de 8:00 a 16:00 hs.</li>
               </ul>
+
+              {/* Botón para agendar cita presencial por WhatsApp */}
+              <button
+                onClick={handleAppointmentClick}
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
+                }}
+              >
+                📅 Agendar una cita por WhatsApp
+              </button>
             </div>
 
             <div style={{ width: '100%', height: '260px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f1f5f9' }}>
               <iframe
                 title="Ubicación Oficina"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3404.996191740938!2d-64.192323!3d-31.416875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432a285d1e2e1d7%3A0x6b7724d1a1b8cf4b!2sTribunales%20I%20C%C3%B3rdoba!5e0!3m2!1ses-419!2sar!4v1650000000000!5m2!1ses-419!2sar"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3404.757754326552!2d-64.1887764!3d-31.4196127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432a28116172cd5%3A0xf67323214532650!2sC%C3%B3rdoba!5e0!3m2!1ses!2sar!4v1700000000000!5m2!1ses!2sar"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -1060,7 +1087,7 @@ export default function Page() {
 
       </div>
 
-      {/* ASISTENTE VIRTUAL INTERACTIVO */}
+      {/* ASISTENTE VIRTUAL INTERACTIVO CON ESTILO CRISTAL Y TAMAÑO REDUCIDO */}
       <div className="chat-widget-container">
         {!isAssistantOpen ? (
           <button
@@ -1074,65 +1101,69 @@ export default function Page() {
           </button>
         ) : (
           <div className="chat-window" style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: 'rgba(255, 255, 255, 0.82)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
-            border: '1px solid #e2e8f0',
+            boxShadow: '0 16px 36px rgba(15, 23, 42, 0.18)',
+            border: '1px solid rgba(255, 255, 255, 0.6)',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden'
           }}>
             {/* Header del chat */}
-            <div style={{ backgroundColor: '#0f172a', color: '#ffffff', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ backgroundColor: '#0f172a', color: '#ffffff', padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 700 }}>Asistente GestorPro</h4>
-                <span style={{ fontSize: '11px', color: '#4ade80' }}>● En línea</span>
+                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700 }}>Asistente GestorPro</h4>
+                <span style={{ fontSize: '10px', color: '#4ade80' }}>● En línea</span>
               </div>
               <button
                 onClick={() => setIsAssistantOpen(false)}
-                style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', color: '#ffffff', fontSize: '16px', cursor: 'pointer', padding: '4px' }}
               >
                 ✕
               </button>
             </div>
 
             {/* Mensajes */}
-            <div ref={chatContainerRef} style={{ flex: 1, padding: '14px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#f8fafc' }}>
+            <div ref={chatContainerRef} style={{ flex: 1, padding: '12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: 'transparent' }}>
               {messages.map((msg, index) => (
                 <div key={index} style={{
                   alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '90%'
+                  maxWidth: '92%'
                 }}>
                   <div style={{
-                    backgroundColor: msg.role === 'user' ? '#2563eb' : '#ffffff',
+                    backgroundColor: msg.role === 'user' ? '#2563eb' : 'rgba(255, 255, 255, 0.92)',
+                    backdropFilter: msg.role === 'model' ? 'blur(4px)' : 'none',
                     color: msg.role === 'user' ? '#ffffff' : '#0f172a',
-                    padding: '10px 14px',
-                    borderRadius: '12px',
-                    fontSize: '13px',
-                    lineHeight: 1.4,
-                    border: msg.role === 'model' ? '1px solid #e2e8f0' : 'none',
-                    boxShadow: msg.role === 'model' ? '0 2px 5px rgba(0,0,0,0.02)' : 'none',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    fontSize: '12px',
+                    lineHeight: 1.45,
+                    border: msg.role === 'model' ? '1px solid rgba(226, 232, 240, 0.8)' : 'none',
+                    boxShadow: msg.role === 'model' ? '0 2px 6px rgba(0,0,0,0.04)' : 'none',
                     whiteSpace: 'pre-line'
                   }}>
                     {msg.text}
                   </div>
 
                   {msg.options && msg.options.length > 0 && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '6px' }}>
                       {msg.options.map((opt, i) => (
                         <button
                           key={i}
                           onClick={() => handleOptionClick(opt.action, opt.data)}
                           style={{
-                            backgroundColor: opt.action === 'whatsapp' ? '#16a34a' : '#ffffff',
+                            backgroundColor: opt.action === 'whatsapp' ? '#16a34a' : 'rgba(255, 255, 255, 0.95)',
                             color: opt.action === 'whatsapp' ? '#ffffff' : '#1e293b',
                             border: opt.action === 'whatsapp' ? 'none' : '1px solid #cbd5e1',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            fontSize: '12px',
+                            padding: '7px 10px',
+                            borderRadius: '6px',
+                            fontSize: '11px',
                             fontWeight: 600,
                             cursor: 'pointer',
-                            textAlign: 'left'
+                            textAlign: 'left',
+                            backdropFilter: 'blur(4px)'
                           }}
                         >
                           {opt.label}
@@ -1145,8 +1176,8 @@ export default function Page() {
             </div>
 
             {/* Footer del chat */}
-            <div style={{ padding: '10px', backgroundColor: '#ffffff', borderTop: '1px solid #e2e8f0', textAlign: 'center' }}>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>Seleccioná una opción para continuar</span>
+            <div style={{ padding: '8px 10px', backgroundColor: 'rgba(255, 255, 255, 0.7)', borderTop: '1px solid rgba(226, 232, 240, 0.6)', textAlign: 'center' }}>
+              <span style={{ fontSize: '10px', color: '#64748b', fontWeight: 500 }}>Seleccioná una opción para continuar</span>
             </div>
           </div>
         )}
@@ -1228,26 +1259,30 @@ export default function Page() {
         </div>
       )}
 
-      {/* FOOTER */}
+      {/* FOOTER MINIMALISTA */}
       <footer style={{ 
         backgroundColor: '#0f172a', 
         color: '#94a3b8', 
-        padding: '40px 20px 24px 20px',
+        padding: '40px 24px 28px 24px',
         borderTop: '1px solid #1e293b'
       }}>
         <div style={{ 
           maxWidth: '1280px', 
           margin: '0 auto', 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
-          gap: '32px',
-          marginBottom: '32px'
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '24px' 
         }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+          {/* Bloque Superior: Logo + Leyenda Ampliada */}
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '8px' 
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ 
-                width: '30px', 
-                height: '30px', 
+                width: '32px', 
+                height: '32px', 
                 backgroundColor: '#2563eb', 
                 color: '#ffffff', 
                 borderRadius: '6px', 
@@ -1255,57 +1290,38 @@ export default function Page() {
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 fontWeight: 800,
-                fontSize: '14px'
+                fontSize: '15px'
               }}>
                 G
               </div>
-              <span style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
                 GESTOR<span style={{ color: '#2563eb' }}>PRO</span>
               </span>
             </div>
-            <p style={{ fontSize: '13px', lineHeight: 1.6, margin: 0 }}>
-              Soluciones integrales en gestoría judicial, registral, administrativa y previsional en Córdoba e interior.
+
+            <p style={{ 
+              fontSize: '13px', 
+              color: '#94a3b8', 
+              margin: 0, 
+              lineHeight: 1.5,
+              maxWidth: '520px'
+            }}>
+              Soluciones integrales de gestoría e intermediación técnica presencial en Córdoba e interior.
             </p>
           </div>
 
-          <div>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0' }}>
-              Contacto Directo
-            </h4>
-            <p style={{ fontSize: '13px', lineHeight: 1.6, margin: '0 0 12px 0' }}>
-              📍 Calle Linda 123, Córdoba Capital.<br />
-              ⏱ Lunes a Viernes de 8:00 a 16:00 hs.
-            </p>
-            <button
-              onClick={() => window.open(`https://wa.me/${whatsappPhone}?text=` + encodeURIComponent('Hola, quiero hacer una consulta general desde la web.'), '_blank')}
-              style={{
-                backgroundColor: '#16a34a',
-                color: '#ffffff',
-                border: 'none',
-                padding: '10px 16px',
-                borderRadius: '8px',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer'
-              }}
-            >
-              💬 WhatsApp Directo
-            </button>
+          {/* Línea inferior: Copyright a la izquierda */}
+          <div style={{ 
+            borderTop: '1px solid #1e293b', 
+            paddingTop: '20px', 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            fontSize: '12px',
+            color: '#64748b'
+          }}>
+            <span>© {new Date().getFullYear()} GestorPro Córdoba e interior. Todos los derechos reservados.</span>
           </div>
-        </div>
-
-        <div style={{ 
-          maxWidth: '1280px', 
-          margin: '0 auto', 
-          borderTop: '1px solid #1e293b', 
-          paddingTop: '20px', 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          fontSize: '12px',
-          textAlign: 'center'
-        }}>
-          <span>© {new Date().getFullYear()} GestorPro Córdoba e interior. Todos los derechos reservados.</span>
         </div>
       </footer>
 
