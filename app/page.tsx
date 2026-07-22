@@ -20,7 +20,7 @@ interface ChatMessage {
 }
 
 const servicesList: Service[] = [
-  // --- JUDICIAL (8 servicios) ---
+  // --- JUDICIAL ---
   {
     id: 'cedulas',
     title: 'Cédulas Ley 22.172',
@@ -102,7 +102,7 @@ const servicesList: Service[] = [
     organismo: 'Tribunales Penales / Fiscalías'
   },
 
-  // --- REGISTRAL (8 servicios) ---
+  // --- REGISTRAL ---
   {
     id: 'propiedad',
     title: 'Registro General de la Propiedad (RPI)',
@@ -184,7 +184,7 @@ const servicesList: Service[] = [
     organismo: 'Delegación INPI Córdoba'
   },
 
-  // --- ADMINISTRATIVO (8 servicios) ---
+  // --- ADMINISTRATIVO ---
   {
     id: 'comercial_pj',
     title: 'Inspección de Personas Jurídicas (IPJ)',
@@ -266,7 +266,7 @@ const servicesList: Service[] = [
     organismo: 'EPEC / ECOGAS'
   },
 
-  // --- PREVISIONAL (6 servicios) ---
+  // --- PREVISIONAL ---
   {
     id: 'anses',
     title: 'Trámites ante ANSES',
@@ -334,6 +334,9 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedCalcService, setSelectedCalcService] = useState<Service>(servicesList[0]);
+  
+  // Estado para el menú hamburguesa móvil
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Estado del asistente virtual flotante
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
@@ -377,7 +380,6 @@ export default function Page() {
         action: 'service',
         data: s.id
       }));
-      // CORREGIDO: Se añade 'data: ""' para cumplir exactamente con la interfaz requerida
       subMenuOptions.push({ label: '🔙 Volver al menú principal', action: 'main_menu', data: '' });
       
       const newMsgBot: ChatMessage = {
@@ -442,6 +444,110 @@ export default function Page() {
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       
+      {/* Estilos Responsivos y Media Queries */}
+      <style>{`
+        .nav-desktop {
+          display: flex;
+          gap: 28px;
+          align-items: center;
+        }
+        .hamburger-btn {
+          display: none;
+        }
+        .mobile-dropdown-menu {
+          display: none;
+        }
+        .hero-section {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 40px;
+          align-items: center;
+          margin-bottom: 60px;
+          background-color: #ffffff;
+          border-radius: 20px;
+          padding: 56px 40px;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .simulator-card {
+          box-sizing: border-box;
+          width: 100%;
+        }
+        .filter-desktop {
+          display: flex;
+          gap: 6px;
+          background-color: #e2e8f0;
+          padding: 4px;
+          border-radius: 8px;
+        }
+        .filter-mobile {
+          display: none;
+        }
+        .chat-widget-container {
+          position: fixed;
+          bottom: 24px;
+          right: 24px;
+          z-index: 1000;
+        }
+        .chat-window {
+          width: 380px;
+          height: 520px;
+        }
+
+        @media (max-width: 768px) {
+          .nav-desktop {
+            display: none;
+          }
+          .hamburger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #0f172a;
+          }
+          .mobile-dropdown-menu {
+            display: ${isMobileMenuOpen ? 'flex' : 'none'};
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+          }
+          .hero-section {
+            grid-template-columns: 1fr;
+            padding: 24px 16px;
+            gap: 28px;
+            margin-bottom: 32px;
+          }
+          .simulator-card {
+            padding: 18px !important;
+          }
+          .filter-desktop {
+            display: none;
+          }
+          .filter-mobile {
+            display: block;
+            width: 100%;
+          }
+          .chat-widget-container {
+            bottom: 16px;
+            right: 16px;
+            left: 16px;
+          }
+          .chat-window {
+            width: 100% !important;
+            height: 80vh !important;
+            max-height: 550px;
+          }
+        }
+      `}</style>
+
+      {/* HEADER */}
       <header style={{ 
         position: 'sticky',
         top: 0,
@@ -453,15 +559,15 @@ export default function Page() {
         <div style={{ 
           maxWidth: '1280px', 
           margin: '0 auto', 
-          padding: '16px 24px',
+          padding: '12px 20px',
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center' 
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ 
-              width: '38px', 
-              height: '38px', 
+              width: '36px', 
+              height: '36px', 
               backgroundColor: '#0f172a', 
               color: '#ffffff', 
               borderRadius: '8px', 
@@ -473,56 +579,106 @@ export default function Page() {
             }}>
               G
             </div>
-            <span style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', marginLeft: '4px' }}>
+            <span style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
               GESTOR<span style={{ color: '#2563eb' }}>PRO</span>
             </span>
           </div>
 
-          <nav style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
+          {/* Menú para Escritorio */}
+          <nav className="nav-desktop">
             <a href="#hero" style={{ fontSize: '14px', color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Inicio</a>
             <a href="#servicios" style={{ fontSize: '14px', color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Servicios</a>
             <a href="#proceso" style={{ fontSize: '14px', color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Cómo Trabajamos</a>
             <a href="#contacto" style={{ fontSize: '14px', color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Oficina y Contacto</a>
           </nav>
+
+          {/* Botón Hamburguesa Móvil */}
+          <button 
+            className="hamburger-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Abrir menú"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+
+        {/* Desplegable Móvil al Presionar Hamburguesa */}
+        <div className="mobile-dropdown-menu">
+          <a 
+            href="#hero" 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            style={{ fontSize: '15px', color: '#0f172a', textDecoration: 'none', fontWeight: 600, padding: '6px 0' }}
+          >
+            Inicio
+          </a>
+          <a 
+            href="#servicios" 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            style={{ fontSize: '15px', color: '#0f172a', textDecoration: 'none', fontWeight: 600, padding: '6px 0' }}
+          >
+            Servicios
+          </a>
+          <a 
+            href="#proceso" 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            style={{ fontSize: '15px', color: '#0f172a', textDecoration: 'none', fontWeight: 600, padding: '6px 0' }}
+          >
+            Cómo Trabajamos
+          </a>
+          <a 
+            href="#contacto" 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            style={{ fontSize: '15px', color: '#0f172a', textDecoration: 'none', fontWeight: 600, padding: '6px 0' }}
+          >
+            Oficina y Contacto
+          </a>
+          <a 
+            href={`https://wa.me/${whatsappPhone}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: '10px 14px',
+              backgroundColor: '#16a34a',
+              color: '#ffffff',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: 700,
+              textDecoration: 'none',
+              textAlign: 'center',
+              marginTop: '4px'
+            }}
+          >
+            💬 Contactar por WhatsApp
+          </a>
         </div>
       </header>
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '40px 24px', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '20px 16px', boxSizing: 'border-box' }}>
         
-        <section id="hero" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '40px', 
-          alignItems: 'center', 
-          marginBottom: '60px',
-          backgroundColor: '#ffffff',
-          borderRadius: '20px',
-          padding: '56px 40px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.03)'
-        }}>
+        {/* HERO SECTION */}
+        <section id="hero" className="hero-section">
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', backgroundColor: '#eff6ff', border: '1px solid #dbeafe', marginBottom: '20px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '100px', backgroundColor: '#eff6ff', border: '1px solid #dbeafe', marginBottom: '16px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'inline-block' }} />
-              <span style={{ fontSize: '13px', color: '#1e40af', fontWeight: 600 }}>Plataforma Integral de Gestoría Córdoba</span>
+              <span style={{ fontSize: '12px', color: '#1e40af', fontWeight: 600 }}>Plataforma Integral de Gestoría Córdoba</span>
             </div>
 
             <h1 style={{ 
-              fontSize: 'clamp(32px, 4vw, 50px)', 
+              fontSize: 'clamp(26px, 4vw, 48px)', 
               fontWeight: 800, 
               letterSpacing: '-0.02em',
-              lineHeight: 1.15, 
-              margin: '0 0 20px 0', 
+              lineHeight: 1.2, 
+              margin: '0 0 16px 0', 
               color: '#0f172a'
             }}>
               Gestión Judicial, Registral, Administrativa y Previsional.
             </h1>
 
             <p style={{ 
-              fontSize: '16px', 
+              fontSize: '15px', 
               color: '#64748b', 
               lineHeight: 1.6, 
-              margin: '0 0 28px 0'
+              margin: '0 0 24px 0'
             }}>
               Optimizamos los tiempos de tu estudio o empresa con presencia presencial diaria en todas las dependencias, fueros y organismos de Córdoba.
             </p>
@@ -531,7 +687,9 @@ export default function Page() {
               <a 
                 href="#servicios"
                 style={{ 
-                  padding: '14px 26px', 
+                  width: '100%',
+                  textAlign: 'center',
+                  padding: '14px 24px', 
                   backgroundColor: '#0f172a', 
                   color: '#ffffff', 
                   borderRadius: '8px', 
@@ -539,18 +697,20 @@ export default function Page() {
                   fontWeight: 600, 
                   textDecoration: 'none',
                   boxShadow: '0 4px 12px rgba(15, 23, 42, 0.15)',
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  boxSizing: 'border-box'
                 }}
               >
-                Ver Catálogo de Servicios →
+                Ver Servicios →
               </a>
             </div>
           </div>
 
-          <div style={{ 
+          {/* SIMULADOR ADAPTADO Y RESPONSIVO */}
+          <div className="simulator-card" style={{ 
             backgroundColor: '#0f172a', 
             borderRadius: '16px', 
-            padding: '32px',
+            padding: '24px',
             color: '#ffffff',
             boxShadow: '0 20px 25px -5px rgba(15, 23, 42, 0.2)'
           }}>
@@ -570,6 +730,7 @@ export default function Page() {
                 }}
                 style={{
                   width: '100%',
+                  boxSizing: 'border-box',
                   padding: '12px',
                   borderRadius: '8px',
                   backgroundColor: '#1e293b',
@@ -593,16 +754,17 @@ export default function Page() {
               border: '1px solid rgba(255, 255, 255, 0.08)', 
               borderRadius: '10px', 
               padding: '16px',
-              marginBottom: '20px'
+              marginBottom: '20px',
+              boxSizing: 'border-box'
             }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
                 <div>
                   <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Plazo Estimado</span>
-                  <span style={{ fontSize: '16px', fontWeight: 800, color: '#4ade80' }}>{selectedCalcService.tiempoDemora}</span>
+                  <span style={{ fontSize: '15px', fontWeight: 800, color: '#4ade80' }}>{selectedCalcService.tiempoDemora}</span>
                 </div>
                 <div>
                   <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Organismo</span>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#38bdf8' }}>{selectedCalcService.organismo}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#38bdf8' }}>{selectedCalcService.organismo}</span>
                 </div>
               </div>
             </div>
@@ -622,7 +784,8 @@ export default function Page() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px'
+                gap: '8px',
+                boxSizing: 'border-box'
               }}
             >
               💬 Iniciar trámite por WhatsApp
@@ -630,19 +793,20 @@ export default function Page() {
           </div>
         </section>
 
-        {/* CATÁLOGO DE SERVICIOS */}
-        <section id="servicios" style={{ marginBottom: '80px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        {/* SECCIÓN DE SERVICIOS */}
+        <section id="servicios" style={{ marginBottom: '60px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <h2 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 6px 0', color: '#0f172a' }}>
-                Catálogo de Servicios
+              <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 6px 0', color: '#0f172a' }}>
+                Servicios
               </h2>
               <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
-                Filtrá por área profesional para encontrar el trámite específico que necesitás.
+                Filtrá por área profesional para encontrar el trámite específico.
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '6px', backgroundColor: '#e2e8f0', padding: '4px', borderRadius: '8px', flexWrap: 'wrap' }}>
+            {/* FILTRO 1: DESKTOP (Botones) */}
+            <div className="filter-desktop">
               {['todos', 'Judicial', 'Registral', 'Administrativo', 'Previsional'].map((tab) => {
                 const isActive = activeTab.toLowerCase() === tab.toLowerCase();
                 return (
@@ -650,7 +814,7 @@ export default function Page() {
                     key={tab}
                     onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
                     style={{
-                      padding: '8px 16px',
+                      padding: '8px 14px',
                       borderRadius: '6px',
                       border: 'none',
                       backgroundColor: isActive ? '#ffffff' : 'transparent',
@@ -666,9 +830,38 @@ export default function Page() {
                 );
               })}
             </div>
+
+            {/* FILTRO 2: MÓVIL (Menú Desplegable / Select) */}
+            <div className="filter-mobile">
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '6px' }}>
+                Filtrar por Categoría:
+              </label>
+              <select
+                value={activeTab}
+                onChange={(e) => { setActiveTab(e.target.value); setCurrentPage(1); }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: '1px solid #cbd5e1',
+                  backgroundColor: '#ffffff',
+                  fontSize: '14px',
+                  color: '#0f172a',
+                  fontWeight: 600,
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <option value="todos">Todos los servicios</option>
+                <option value="Judicial">Judicial</option>
+                <option value="Registral">Registral</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Previsional">Previsional</option>
+              </select>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginBottom: '28px' }}>
             {currentItems.map((service) => (
               <div 
                 key={service.id}
@@ -677,7 +870,7 @@ export default function Page() {
                   backgroundColor: '#ffffff',
                   border: '1px solid #e2e8f0',
                   borderRadius: '12px',
-                  padding: '24px',
+                  padding: '20px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
@@ -685,8 +878,8 @@ export default function Page() {
                 }}
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 8px', backgroundColor: '#f1f5f9', borderRadius: '100px', color: '#475569', fontWeight: 600, textTransform: 'uppercase' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '10px', padding: '3px 8px', backgroundColor: '#f1f5f9', borderRadius: '100px', color: '#475569', fontWeight: 600, textTransform: 'uppercase' }}>
                       {service.category}
                     </span>
                     <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: 600 }}>
@@ -694,11 +887,11 @@ export default function Page() {
                     </span>
                   </div>
 
-                  <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 8px 0', color: '#0f172a' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 8px 0', color: '#0f172a' }}>
                     {service.title}
                   </h3>
 
-                  <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 20px 0', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
                     {service.description}
                   </p>
                 </div>
@@ -719,13 +912,13 @@ export default function Page() {
                     key={page}
                     onClick={() => setCurrentPage(page)}
                     style={{
-                      width: '38px',
-                      height: '38px',
+                      width: '36px',
+                      height: '36px',
                       borderRadius: '8px',
                       border: '1px solid #cbd5e1',
                       backgroundColor: isActive ? '#0f172a' : '#ffffff',
                       color: isActive ? '#ffffff' : '#0f172a',
-                      fontSize: '14px',
+                      fontSize: '13px',
                       fontWeight: 600,
                       cursor: 'pointer'
                     }}
@@ -739,17 +932,17 @@ export default function Page() {
         </section>
 
         {/* SECCIÓN CÓMO TRABAJAMOS */}
-        <section id="proceso" style={{ marginBottom: '80px' }}>
-          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 40px auto' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', margin: '0 0 10px 0' }}>
+        <section id="proceso" style={{ marginBottom: '60px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 32px auto' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', margin: '0 0 8px 0' }}>
               Cómo Trabajamos
             </h2>
-            <p style={{ fontSize: '15px', color: '#64748b', margin: 0 }}>
+            <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
               Un proceso ágil y transparente diseñado para optimizar el tiempo de tu estudio o empresa.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
             {[
               {
                 step: '01',
@@ -776,23 +969,22 @@ export default function Page() {
                 backgroundColor: '#ffffff',
                 border: '1px solid #e2e8f0',
                 borderRadius: '12px',
-                padding: '28px 24px',
-                position: 'relative'
+                padding: '20px'
               }}>
                 <span style={{
-                  fontSize: '28px',
+                  fontSize: '24px',
                   fontWeight: 900,
                   color: '#2563eb',
-                  opacity: 0.2,
+                  opacity: 0.3,
                   display: 'block',
-                  marginBottom: '12px'
+                  marginBottom: '8px'
                 }}>
                   {item.step}
                 </span>
-                <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#0f172a', margin: '0 0 10px 0' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: '0 0 8px 0' }}>
                   {item.title}
                 </h3>
-                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
                   {item.desc}
                 </p>
               </div>
@@ -800,24 +992,23 @@ export default function Page() {
           </div>
         </section>
 
-        {/* SECCIÓN DE UBICACIÓN Y MAPA */}
-        <section id="contacto" style={{ marginBottom: '80px', backgroundColor: '#ffffff', borderRadius: '20px', padding: '40px', border: '1px solid #e2e8f0' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px', alignItems: 'center' }}>
+        {/* UBICACIÓN Y MAPA */}
+        <section id="contacto" style={{ marginBottom: '60px', backgroundColor: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', alignItems: 'center' }}>
             <div>
-              <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', margin: '0 0 16px 0' }}>
+              <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', margin: '0 0 12px 0' }}>
                 Oficina Principal
               </h2>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6, margin: '0 0 20px 0' }}>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6, margin: '0 0 16px 0' }}>
                 Operamos de forma presencial con cobertura en Córdoba y el interior, optimizando los plazos y gestiones ante cada dependencia.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: '#334155' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px 0', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#334155' }}>
                 <li>📍 <strong>Dirección:</strong> Calle Linda 123, Córdoba Capital.</li>
-                <br />
                 <li>⏱ <strong>Horario de atención:</strong> Lunes a Viernes de 8:00 a 16:00 hs.</li>
               </ul>
             </div>
 
-            <div style={{ width: '100%', height: '320px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f1f5f9' }}>
+            <div style={{ width: '100%', height: '260px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f1f5f9' }}>
               <iframe
                 title="Ubicación Oficina"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3404.996191740938!2d-64.192323!3d-31.416875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432a285d1e2e1d7%3A0x6b7724d1a1b8cf4b!2sTribunales%20I%20C%C3%B3rdoba!5e0!3m2!1ses-419!2sar!4v1650000000000!5m2!1ses-419!2sar"
@@ -834,8 +1025,8 @@ export default function Page() {
 
       </div>
 
-      {/* ASISTENTE VIRTUAL INTERACTIVO (BOTÓN GRANDE Y FLOTANTE) */}
-      <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 1000 }}>
+      {/* ASISTENTE VIRTUAL INTERACTIVO */}
+      <div className="chat-widget-container">
         {!isAssistantOpen ? (
           <button
             onClick={() => setIsAssistantOpen(true)}
@@ -844,38 +1035,37 @@ export default function Page() {
               color: '#ffffff',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '50px',
-              padding: '16px 24px',
-              fontSize: '15px',
+              padding: '12px 20px',
+              fontSize: '14px',
               fontWeight: 700,
               cursor: 'pointer',
               boxShadow: '0 12px 30px rgba(15, 23, 42, 0.35)',
               display: 'flex',
               alignItems: 'center',
-              gap: '12px',
-              transition: 'transform 0.2s ease'
+              justifyContent: 'center',
+              gap: '10px',
+              width: '100%'
             }}
           >
-            <span style={{ fontSize: '18px' }}>💬</span>
+            <span style={{ fontSize: '16px' }}>💬</span>
             <span>Asistente Virtual</span>
-            <span style={{ width: '10px', height: '10px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
+            <span style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
           </button>
         ) : (
-          <div style={{
-            width: '380px',
-            height: '520px',
+          <div className="chat-window" style={{
             backgroundColor: '#ffffff',
             borderRadius: '16px',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
             border: '1px solid #e2e8f0',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden'
           }}>
             {/* Header del chat */}
-            <div style={{ backgroundColor: '#0f172a', color: '#ffffff', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ backgroundColor: '#0f172a', color: '#ffffff', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 700 }}>Asistente GestorPro</h4>
-                <span style={{ fontSize: '11px', color: '#4ade80' }}>● En línea para orientarte</span>
+                <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 700 }}>Asistente GestorPro</h4>
+                <span style={{ fontSize: '11px', color: '#4ade80' }}>● En línea</span>
               </div>
               <button
                 onClick={() => setIsAssistantOpen(false)}
@@ -886,19 +1076,19 @@ export default function Page() {
             </div>
 
             {/* Mensajes */}
-            <div ref={chatContainerRef} style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px', backgroundColor: '#f8fafc' }}>
+            <div ref={chatContainerRef} style={{ flex: 1, padding: '14px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#f8fafc' }}>
               {messages.map((msg, index) => (
                 <div key={index} style={{
                   alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '85%'
+                  maxWidth: '90%'
                 }}>
                   <div style={{
                     backgroundColor: msg.role === 'user' ? '#2563eb' : '#ffffff',
                     color: msg.role === 'user' ? '#ffffff' : '#0f172a',
-                    padding: '12px 16px',
+                    padding: '10px 14px',
                     borderRadius: '12px',
                     fontSize: '13px',
-                    lineHeight: 1.5,
+                    lineHeight: 1.4,
                     border: msg.role === 'model' ? '1px solid #e2e8f0' : 'none',
                     boxShadow: msg.role === 'model' ? '0 2px 5px rgba(0,0,0,0.02)' : 'none',
                     whiteSpace: 'pre-line'
@@ -906,9 +1096,8 @@ export default function Page() {
                     {msg.text}
                   </div>
 
-                  {/* Opciones interactivas de botones */}
                   {msg.options && msg.options.length > 0 && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
                       {msg.options.map((opt, i) => (
                         <button
                           key={i}
@@ -917,13 +1106,12 @@ export default function Page() {
                             backgroundColor: opt.action === 'whatsapp' ? '#16a34a' : '#ffffff',
                             color: opt.action === 'whatsapp' ? '#ffffff' : '#1e293b',
                             border: opt.action === 'whatsapp' ? 'none' : '1px solid #cbd5e1',
-                            padding: '10px 14px',
+                            padding: '8px 12px',
                             borderRadius: '8px',
                             fontSize: '12px',
                             fontWeight: 600,
                             cursor: 'pointer',
-                            textAlign: 'left',
-                            transition: 'all 0.2s'
+                            textAlign: 'left'
                           }}
                         >
                           {opt.label}
@@ -936,8 +1124,8 @@ export default function Page() {
             </div>
 
             {/* Footer del chat */}
-            <div style={{ padding: '12px', backgroundColor: '#ffffff', borderTop: '1px solid #e2e8f0', textAlign: 'center' }}>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>Seleccioná una opción para continuar la consulta</span>
+            <div style={{ padding: '10px', backgroundColor: '#ffffff', borderTop: '1px solid #e2e8f0', textAlign: 'center' }}>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>Seleccioná una opción para continuar</span>
             </div>
           </div>
         )}
@@ -951,21 +1139,25 @@ export default function Page() {
           left: 0,
           width: '100vw',
           height: '100vh',
-          backgroundColor: 'rgba(15, 23, 42, 0.5)',
+          backgroundColor: 'rgba(15, 23, 42, 0.6)',
           backdropFilter: 'blur(4px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 2000,
-          padding: '20px'
+          padding: '16px',
+          boxSizing: 'border-box'
         }}>
           <div style={{
             backgroundColor: '#ffffff',
             borderRadius: '16px',
-            maxWidth: '500px',
+            maxWidth: '480px',
             width: '100%',
-            padding: '32px',
-            position: 'relative'
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            padding: '24px',
+            position: 'relative',
+            boxSizing: 'border-box'
           }}>
             <button
               onClick={() => setSelectedService(null)}
@@ -976,19 +1168,19 @@ export default function Page() {
               ✕
             </button>
 
-            <span style={{ fontSize: '11px', padding: '3px 8px', backgroundColor: '#eff6ff', color: '#1d4ed8', borderRadius: '100px', fontWeight: 600, textTransform: 'uppercase', display: 'inline-block', marginBottom: '12px' }}>
+            <span style={{ fontSize: '10px', padding: '3px 8px', backgroundColor: '#eff6ff', color: '#1d4ed8', borderRadius: '100px', fontWeight: 600, textTransform: 'uppercase', display: 'inline-block', marginBottom: '12px' }}>
               {selectedService.category}
             </span>
 
-            <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#0f172a', margin: '0 0 8px 0' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '0 0 8px 0' }}>
               {selectedService.title}
             </h3>
 
-            <p style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600, marginBottom: '16px' }}>
-              ⏱ Demora estimada: {selectedService.tiempoDemora} | Organismo: {selectedService.organismo}
+            <p style={{ fontSize: '12px', color: '#16a34a', fontWeight: 600, marginBottom: '16px' }}>
+              ⏱ Demora: {selectedService.tiempoDemora} | Organismo: {selectedService.organismo}
             </p>
 
-            <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.5, margin: '0 0 24px 0' }}>
+            <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, margin: '0 0 20px 0' }}>
               {selectedService.explicacionAmpliada}
             </p>
 
@@ -1019,22 +1211,22 @@ export default function Page() {
       <footer style={{ 
         backgroundColor: '#0f172a', 
         color: '#94a3b8', 
-        padding: '60px 24px 30px 24px',
+        padding: '40px 20px 24px 20px',
         borderTop: '1px solid #1e293b'
       }}>
         <div style={{ 
           maxWidth: '1280px', 
           margin: '0 auto', 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-          gap: '40px',
-          marginBottom: '40px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+          gap: '32px',
+          marginBottom: '32px'
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
               <div style={{ 
-                width: '32px', 
-                height: '32px', 
+                width: '30px', 
+                height: '30px', 
                 backgroundColor: '#2563eb', 
                 color: '#ffffff', 
                 borderRadius: '6px', 
@@ -1042,7 +1234,7 @@ export default function Page() {
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 fontWeight: 800,
-                fontSize: '15px'
+                fontSize: '14px'
               }}>
                 G
               </div>
@@ -1056,35 +1248,11 @@ export default function Page() {
           </div>
 
           <div>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: '0 0 16px 0' }}>
-              Enlaces Rápidos
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              <li><a href="#hero" style={{ color: '#94a3b8', textDecoration: 'none' }}>Inicio</a></li>
-              <li><a href="#servicios" style={{ color: '#94a3b8', textDecoration: 'none' }}>Catálogo de Servicios</a></li>
-              <li><a href="#proceso" style={{ color: '#94a3b8', textDecoration: 'none' }}>Cómo Trabajamos</a></li>
-              <li><a href="#contacto" style={{ color: '#94a3b8', textDecoration: 'none' }}>Oficina y Contacto</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: '0 0 16px 0' }}>
-              Áreas Profesionales
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              <li>Trámites Judiciales (Cédulas y Oficios)</li>
-              <li>Trámites Registrales (RPI y Automotor)</li>
-              <li>Administrativos (IPJ y Rentas)</li>
-              <li>Previsionales (ANSES y Caja de Jubilaciones)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: '0 0 16px 0' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0' }}>
               Contacto Directo
             </h4>
             <p style={{ fontSize: '13px', lineHeight: 1.6, margin: '0 0 12px 0' }}>
-              📍 Calle Linda 123, Córdoba e interior.<br />
+              📍 Calle Linda 123, Córdoba Capital.<br />
               ⏱ Lunes a Viernes de 8:00 a 16:00 hs.
             </p>
             <button
