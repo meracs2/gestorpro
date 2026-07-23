@@ -333,7 +333,20 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState('todos');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  
+  // Estados para el Simulador de Costos con Viáticos y Kilometraje (Cambiado a distancia de ida)
   const [selectedCalcService, setSelectedCalcService] = useState<Service>(servicesList[0]);
+  const [tipoRetiro, setTipoRetiro] = useState<'oficina' | 'domicilio'>('oficina');
+  const [kilometrosIda, setKilometrosIda] = useState<number | ''>('');
+  
+  // Precio base orientativo del trámite y costo por km
+  const costoTramiteBase = 15000;
+  const precioPorKm = 1000;
+  
+  // Multiplicamos por 2 automáticamente los kilómetros de ida para contemplar ida y vuelta
+  const kmIdaYVuelta = (Number(kilometrosIda) || 0) * 2;
+  const costoEnvio = tipoRetiro === 'domicilio' ? kmIdaYVuelta * precioPorKm : 0;
+  const costoTotalEstimado = costoTramiteBase + costoEnvio;
   
   // Estado para el menú hamburguesa móvil
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -428,7 +441,12 @@ export default function Page() {
   };
 
   const handleWhatsAppCalc = () => {
-    const text = `Hola, quiero iniciar o consultar por el trámite de *${selectedCalcService.title}* (${selectedCalcService.category}). El plazo estimado indicado es de ${selectedCalcService.tiempoDemora} ante el organismo ${selectedCalcService.organismo}.`;
+    const kmIdaVal = Number(kilometrosIda) || 0;
+    const detalleModalidad = tipoRetiro === 'domicilio' 
+      ? `con retiro a domicilio / interior (${kmIdaVal} km de ida, ${kmIdaYVuelta} km totales ida y vuelta, viático estimado $${costoEnvio.toLocaleString('es-AR')})` 
+      : 'con entrega en oficina (sin costo de traslado)';
+    
+    const text = `Hola, hice una cotización estimada en la web para el trámite *${selectedCalcService.title}* (${selectedCalcService.category}). Modalidad: ${detalleModalidad}. Total estimado orientativo: $${costoTotalEstimado.toLocaleString('es-AR')} ARS. Quisiera coordinar y confirmar el valor exacto.`;
     window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -747,7 +765,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* SIMULADOR ADAPTADO Y RESPONSIVO */}
+          {/* SIMULADOR ADAPTADO CON CALCULADORA DE KILÓMETROS DE IDA (Y CÁLCULO AUTOMÁTICO DE IDA Y VUELTA) */}
           <div className="simulator-card" style={{ 
             backgroundColor: '#0f172a', 
             borderRadius: '16px', 
@@ -756,10 +774,11 @@ export default function Page() {
             boxShadow: '0 20px 25px -5px rgba(15, 23, 42, 0.2)'
           }}>
             <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', margin: '0 0 16px 0' }}>
-              ⚡ Simulador Exprés de Trámites
+              ⚡ Simulador y Cotizador Exprés
             </h3>
 
-            <div style={{ marginBottom: '16px' }}>
+            {/* Selector de Trámite */}
+            <div style={{ marginBottom: '14px' }}>
               <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 600 }}>
                 Tipo de Trámite / Servicio
               </label>
@@ -772,7 +791,7 @@ export default function Page() {
                 style={{
                   width: '100%',
                   boxSizing: 'border-box',
-                  padding: '12px',
+                  padding: '10px 12px',
                   borderRadius: '8px',
                   backgroundColor: '#1e293b',
                   border: '1px solid #334155',
@@ -790,23 +809,91 @@ export default function Page() {
               </select>
             </div>
 
+            {/* Selector de Modalidad (Oficina vs Domicilio / Interior) */}
+            <div style={{ marginBottom: '14px' }}>
+              <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 600 }}>
+                Modalidad de Retiro / Traslado:
+              </label>
+              <select 
+                value={tipoRetiro}
+                onChange={(e) => setTipoRetiro(e.target.value as 'oficina' | 'domicilio')}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  backgroundColor: '#1e293b',
+                  border: '1px solid #334155',
+                  color: '#ffffff',
+                  fontSize: '13px',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="oficina">Se entrega en Oficina (Sin costo extra)</option>
+                <option value="domicilio">Retiro a domicilio / Interior (Viáticos por km)</option>
+              </select>
+            </div>
+
+            {/* Input de Kilómetros de ida si requiere domicilio / interior */}
+            {tipoRetiro === 'domicilio' && (
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 600 }}>
+                  Distancia de ida (Km):
+                </label>
+                <input 
+                  type="number"
+                  min="0"
+                  value={kilometrosIda}
+                  onChange={(e) => setKilometrosIda(e.target.value === '' ? '' : Number(e.target.value))}
+                  placeholder="Ej: 20 (se calculará ida y vuelta automáticamente)"
+                  style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid #334155',
+                    color: '#ffffff',
+                    fontSize: '13px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Recuadro de Resultados (Plazo, Organismo y Cotización estimada) */}
             <div style={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.05)', 
               border: '1px solid rgba(255, 255, 255, 0.08)', 
               borderRadius: '10px', 
-              padding: '16px',
-              marginBottom: '20px',
+              padding: '14px',
+              marginBottom: '16px',
               boxSizing: 'border-box'
             }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
                 <div>
                   <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Plazo Estimado</span>
-                  <span style={{ fontSize: '15px', fontWeight: 800, color: '#4ade80' }}>{selectedCalcService.tiempoDemora}</span>
+                  <span style={{ fontSize: '14px', fontWeight: 800, color: '#4ade80' }}>{selectedCalcService.tiempoDemora}</span>
                 </div>
                 <div>
                   <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Organismo</span>
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#38bdf8' }}>{selectedCalcService.organismo}</span>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#38bdf8', lineHeight: 1.2, display: 'block' }}>{selectedCalcService.organismo}</span>
                 </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Cotización Orientativa:</span>
+                  <span style={{ fontSize: '18px', fontWeight: 800, color: '#4ade80' }}>
+                    ${costoTotalEstimado.toLocaleString('es-AR')} ARS
+                  </span>
+                </div>
+                {tipoRetiro === 'domicilio' && (
+                  <span style={{ fontSize: '10px', color: '#cbd5e1', textAlign: 'right' }}>
+                    (Incluye ${costoEnvio.toLocaleString('es-AR')} de viáticos)
+                  </span>
+                )}
               </div>
             </div>
 
@@ -829,7 +916,7 @@ export default function Page() {
                 boxSizing: 'border-box'
               }}
             >
-              💬 Iniciar trámite por WhatsApp
+              💬 Iniciar y cotizar por WhatsApp
             </button>
           </div>
         </section>
